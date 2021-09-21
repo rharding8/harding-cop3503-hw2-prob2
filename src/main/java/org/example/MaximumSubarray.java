@@ -30,6 +30,9 @@ public class MaximumSubarray {
     if (end - start <= 2) {
       return Arrays.copyOfRange(inArray, start, end);
     }
+    if (end - start <= 4) {
+      return bruteForce(Arrays.copyOfRange(inArray, start, end));
+    }
     int midPoint = start + (end - start) / 2;
     int[] leftArray = recursive(inArray, start, midPoint);
     int[] rightArray = recursive(inArray, midPoint, end);
@@ -52,10 +55,12 @@ public class MaximumSubarray {
     }
     int rightSum = sum;
     sum = leftSum + rightSum;
-    if ((sum > Arrays.stream(leftArray).sum()) && (sum > Arrays.stream(rightArray).sum())) {
+    leftSum = Arrays.stream(leftArray).sum();
+    rightSum = Arrays.stream(rightArray).sum();
+    if ((sum > leftSum) && (sum > rightSum)) {
       return Arrays.copyOfRange(inArray, start, end + 1);
     }
-    else if (Arrays.stream(leftArray).sum() > Arrays.stream(rightArray).sum()) {
+    else if (leftSum > rightSum) {
       return leftArray;
     }
     else {
